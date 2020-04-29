@@ -1,4 +1,5 @@
-<mat-card class='pokemon-card'>
+<mat-card class='pokemon-card'
+  (click)="onOpenDialog()">
   <mat-card-header>
     <mat-card-title class="pokemon-title">
       {{pokemon.name}}
@@ -8,8 +9,8 @@
     <img mat-card-image
       src="{{pokemon.imageUrl}}"
       alt="Photo">
-    <div *ngFor="let type of pokemon.types">
-      {{type}}
+    <div>
+      {{pokemon.supertype}}
     </div>
   </mat-card-content>
 </mat-card>

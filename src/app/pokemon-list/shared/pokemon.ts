@@ -1,13 +1,31 @@
 export class Pokemon {
-  public id: number;
+  public id: string;
   public name: string;
-  public types: string;
+  public supertype: string;
   public imageUrl: string;
+  public series: string;
+  public types: [];
+  public rarity: string;
+  public nationalPokedexNumber: number;
+  public hp: string;
+  public set: string;
+  public weaknesses: [];
+  public attacks: [];
+  public evolvesFrom: string;
   constructor() {
-    this.id = 0;
+    this.id = '';
     this.name = '';
-    this.types = '';
+    this.supertype = '';
     this.imageUrl = '';
+    this.series = '';
+    this.types = [];
+    this.rarity = '';
+    this.nationalPokedexNumber = 0;
+    this.hp = '';
+    this.set = '';
+    this.weaknesses = [];
+    this.attacks = [];
+    this.evolvesFrom = '';
   }
 }
 

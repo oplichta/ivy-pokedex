@@ -4,5 +4,6 @@
 <div class="container">
   <app-pokemon class="wrapper"
     *ngFor="let pokemon of pokemons$ | async"
-    [pokemon]='pokemon'></app-pokemon>
+    [pokemon]='pokemon'
+    (openDialog)="onOpenDialog($event)"></app-pokemon>
 </div>

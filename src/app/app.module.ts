@@ -8,9 +8,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonComponent } from './pokemon-list/pokemon/pokemon.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PokemonDetailsComponent } from './pokemon-list/pokemon-details/pokemon-details.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [AppComponent, PokemonListComponent, PokemonComponent],
+  declarations: [
+    AppComponent,
+    PokemonListComponent,
+    PokemonComponent,
+    PokemonDetailsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -18,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatToolbarModule,
     MatCardModule,
     HttpClientModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

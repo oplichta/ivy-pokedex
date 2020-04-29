@@ -1,0 +1,27 @@
+<mat-card class='pokemon-details'>
+  <div class='details-img-wrapper'>
+    <img mat-card-image
+      class="pokemon-image"
+      src="{{pokemon.imageUrl}}"
+      alt="Photo">
+  </div>
+  <div class='details-wrapper'>
+    <div>Name: {{pokemon.name}}</div>
+    <div>Supertype: {{pokemon.supertype}}</div>
+    <div>Series: {{pokemon.series}}</div>
+    <div>Rarity: {{pokemon.rarity}}</div>
+    <div>Pokedex number: {{pokemon.nationalPokedexNumber}}</div>
+    <div>HP: {{pokemon.hp}}</div>
+    <div>Set: {{pokemon.set}}</div>
+    <div>Weaknesses:
+      <div *ngFor="let weakness of pokemon.weaknesses">{{weakness}}</div>
+    </div>
+    <div>Attacks:
+      <div *ngFor="let attack of pokemon.attacks">{{attack}}</div>
+    </div>
+    <div>Evolves from: {{pokemon.evolvesFrom}}</div>
+    <div>Types:
+      <div *ngFor="let type of pokemon.types">{{type}}</div>
+    </div>
+  </div>
+</mat-card>

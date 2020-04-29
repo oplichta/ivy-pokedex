@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Pokemon } from '../shared/pokemon';
 
 @Component({
@@ -8,7 +8,12 @@ import { Pokemon } from '../shared/pokemon';
 })
 export class PokemonComponent implements OnInit {
   @Input() pokemon: Pokemon;
+  @Output() openDialog = new EventEmitter<string>();
   constructor() {}
 
   ngOnInit(): void {}
+
+  public onOpenDialog() {
+    this.openDialog.next(this.pokemon.id);
+  }
 }
