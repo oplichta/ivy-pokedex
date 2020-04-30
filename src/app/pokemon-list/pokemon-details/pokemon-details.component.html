@@ -13,11 +13,19 @@
     <div>Pokedex number: {{pokemon.nationalPokedexNumber}}</div>
     <div>HP: {{pokemon.hp}}</div>
     <div>Set: {{pokemon.set}}</div>
-    <div>Weaknesses:
-      <div *ngFor="let weakness of pokemon.weaknesses">{{weakness}}</div>
+    <div class='weakness'>Weaknesses:
+      <div *ngFor="let weakness of pokemon.weaknesses">
+        {{weakness.type}} {{weakness.value}}
+      </div>
     </div>
     <div>Attacks:
-      <div *ngFor="let attack of pokemon.attacks">{{attack}}</div>
+      <div *ngFor="let attack of pokemon.attacks">
+        <div>{{attack.name}}</div>
+        <div>{{attack.damage}}</div>
+        <div *ngFor="let cst of attack.cost">{{cst}}</div>
+        <div>{{attack.convertedEnergyCost}}</div>
+        <div>{{attack.text}}</div>
+      </div>
     </div>
     <div>Evolves from: {{pokemon.evolvesFrom}}</div>
     <div>Types:
@@ -25,3 +33,9 @@
     </div>
   </div>
 </mat-card>
+<div>
+  <h2> Similar pokemons:</h2>
+  <app-pokemon class="wrapper"
+    *ngFor="let pokemon of similarPkmns$ | async"
+    [pokemon]='pokemon'></app-pokemon>
+</div>

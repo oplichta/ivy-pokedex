@@ -7,10 +7,10 @@ export class Pokemon {
   public types: [];
   public rarity: string;
   public nationalPokedexNumber: number;
-  public hp: string;
+  public hp: number;
   public set: string;
   public weaknesses: [];
-  public attacks: [];
+  public attacks: Attack[];
   public evolvesFrom: string;
   constructor() {
     this.id = '';
@@ -21,7 +21,7 @@ export class Pokemon {
     this.types = [];
     this.rarity = '';
     this.nationalPokedexNumber = 0;
-    this.hp = '';
+    this.hp = 0;
     this.set = '';
     this.weaknesses = [];
     this.attacks = [];
@@ -33,5 +33,20 @@ export class Cards {
   public cards: Pokemon[];
   constructor() {
     this.cards = [];
+  }
+}
+
+export class Attack {
+  public convertedEnergyCost: number;
+  public cost: [];
+  public damage: string;
+  public name: string;
+  public text: string;
+  constructor() {
+    this.convertedEnergyCost = 0;
+    this.cost = [];
+    this.damage = '';
+    this.name = '';
+    this.text = '';
   }
 }
