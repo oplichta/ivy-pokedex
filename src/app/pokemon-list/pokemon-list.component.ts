@@ -1,33 +1,51 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { Pokemon } from './shared/pokemon';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PokemonListService } from './shared/pokemon-list.service';
-import { map, take } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-list',
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss'],
 })
-export class PokemonListComponent implements OnInit {
+export class PokemonListComponent implements OnInit, OnDestroy {
   public pokemons$: Observable<Pokemon[]>;
   public selectedPokemon: Pokemon;
   public showSpinner = false;
   public pokemonsList = new Array<Pokemon>();
   public loadedPage = 1;
+  public destroy = new Subject<any>();
 
   @Output() openDialog = new EventEmitter<string>();
 
   constructor(
     private pokemonListService: PokemonListService,
-    public dialog: MatDialog
-  ) {}
+    public dialog: MatDialog,
+    route: ActivatedRoute
+  ) {
+    route.params.pipe(takeUntil(this.destroy)).subscribe((params) => {
+      this.onOpenDialog(params.id);
+    });
+  }
 
   notScrolly = true;
   ngOnInit(): void {
+    this.showSpinner = true;
     this.loadPokemons(undefined, this.loadedPage);
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
   }
 
   loadPokemons(id?, page?, types?, supertype?, rarity?) {
