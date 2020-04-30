@@ -18,24 +18,14 @@ export class PokemonListService {
     });
   }
 
-  getPokemons() {
-    return this.http.get<Cards>(this.apiURL + 'cards');
-  }
-
-  getPokemonById(id: string) {
+  getPokemon(id?, page?, types?, supertype?, rarity?) {
     const params = this.params({
-      id: id,
-    });
-    return this.http.get<Cards>(this.apiURL + 'cards', {
-      params: params,
-    });
-  }
-
-  getPokemonWithParams(par) {
-    const params = this.params({
-      types: par.types ? par.types.join() : '',
-      supertype: par.supertype,
-      rarity: par.rarity,
+      id: id === undefined ? '' : id,
+      page: page === undefined ? '' : page,
+      pageSize: 20,
+      types: types ? types.join() : '',
+      supertype: supertype === undefined ? '' : supertype,
+      rarity: rarity === undefined ? '' : rarity,
     });
     return this.http.get<Cards>(this.apiURL + 'cards', {
       params: params,

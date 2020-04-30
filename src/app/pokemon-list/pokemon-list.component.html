@@ -1,9 +1,14 @@
 <mat-toolbar color="primary">
   <span>Ivy Pokedex</span>
 </mat-toolbar>
-<div class="container">
+<div class="container"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll()">
   <app-pokemon class="wrapper"
     *ngFor="let pokemon of pokemons$ | async"
     [pokemon]='pokemon'
     (openDialog)="onOpenDialog($event)"></app-pokemon>
+  <mat-spinner *ngIf='showSpinner'></mat-spinner>
 </div>

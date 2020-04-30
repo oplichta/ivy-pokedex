@@ -2,10 +2,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Pokemon } from './shared/pokemon';
 import { Observable } from 'rxjs';
 import { PokemonListService } from './shared/pokemon-list.service';
-import { map, take, flatMap, filter } from 'rxjs/operators';
+import { map, take, startWith, catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -15,6 +14,9 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 export class PokemonListComponent implements OnInit {
   public pokemons$: Observable<Pokemon[]>;
   public selectedPokemon: Pokemon;
+  public showSpinner = false;
+  public pokemonsList: Pokemon[];
+  public loadedPage = 1;
 
   @Output() openDialog = new EventEmitter<string>();
 
@@ -23,15 +25,24 @@ export class PokemonListComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
+  notScrolly = true;
   ngOnInit(): void {
-    this.pokemons$ = this.pokemonListService
-      .getPokemons()
-      .pipe(map((response) => response.cards));
+    this.loadPokemons(undefined, this.loadedPage);
+  }
+
+  loadPokemons(id?, page?, types?, supertype?, rarity?) {
+    this.pokemons$ = this.pokemonListService.getPokemon(undefined, page).pipe(
+      map((response) => {
+        this.showSpinner = true;
+        this.notScrolly = true;
+        return response.cards;
+      })
+    );
   }
 
   public onOpenDialog(pokemonId: string) {
     this.pokemonListService
-      .getPokemonById(pokemonId)
+      .getPokemon(pokemonId)
       .pipe(
         take(1),
         map((response) => response.cards)
@@ -44,15 +55,14 @@ export class PokemonListComponent implements OnInit {
         });
 
         this.selectedPokemon = res[0];
-
-        const params = {
-          types: this.selectedPokemon.types,
-          supertype: 'Pokémon',
-          rarity: this.selectedPokemon.rarity,
-        };
-
         this.pokemonListService.similarPokemons$ = this.pokemonListService
-          .getPokemonWithParams(params)
+          .getPokemon(
+            undefined,
+            undefined,
+            this.selectedPokemon.types,
+            'Pokémon',
+            this.selectedPokemon.rarity
+          )
           .pipe(
             map((pokemonArray) =>
               pokemonArray.cards
@@ -64,7 +74,15 @@ export class PokemonListComponent implements OnInit {
                 .slice(1, 4)
             )
           );
-        );
       });
+  }
+
+  onScroll() {
+    if (this.notScrolly) {
+      this.showSpinner = true;
+      this.notScrolly = false;
+      this.loadedPage += 1;
+      this.loadPokemons(undefined, this.loadedPage);
+    }
   }
 }

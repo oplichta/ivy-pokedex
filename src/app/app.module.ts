@@ -10,6 +10,8 @@ import { PokemonComponent } from './pokemon-list/pokemon/pokemon.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PokemonDetailsComponent } from './pokemon-list/pokemon-details/pokemon-details.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCardModule,
     HttpClientModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
+    InfiniteScrollModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
