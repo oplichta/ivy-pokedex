@@ -7,7 +7,7 @@
   [infiniteScrollThrottle]="50"
   (scrolled)="onScroll()">
   <app-pokemon class="wrapper"
-    *ngFor="let pokemon of pokemons$ | async"
+    *ngFor="let pokemon of pokemonsList"
     [pokemon]='pokemon'
     (openDialog)="onOpenDialog($event)"></app-pokemon>
   <mat-spinner *ngIf='showSpinner'></mat-spinner>

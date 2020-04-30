@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Pokemon } from './shared/pokemon';
 import { Observable } from 'rxjs';
 import { PokemonListService } from './shared/pokemon-list.service';
-import { map, take, startWith, catchError } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
 
@@ -15,7 +15,7 @@ export class PokemonListComponent implements OnInit {
   public pokemons$: Observable<Pokemon[]>;
   public selectedPokemon: Pokemon;
   public showSpinner = false;
-  public pokemonsList: Pokemon[];
+  public pokemonsList = new Array<Pokemon>();
   public loadedPage = 1;
 
   @Output() openDialog = new EventEmitter<string>();
@@ -31,13 +31,13 @@ export class PokemonListComponent implements OnInit {
   }
 
   loadPokemons(id?, page?, types?, supertype?, rarity?) {
-    this.pokemons$ = this.pokemonListService.getPokemon(undefined, page).pipe(
-      map((response) => {
+    this.pokemonListService
+      .getPokemon(undefined, page)
+      .subscribe((response) => {
         this.showSpinner = true;
         this.notScrolly = true;
-        return response.cards;
-      })
-    );
+        this.pokemonsList = this.pokemonsList.concat(response.cards);
+      });
   }
 
   public onOpenDialog(pokemonId: string) {
