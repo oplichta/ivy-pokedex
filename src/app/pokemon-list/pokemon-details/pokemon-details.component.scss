@@ -6,9 +6,8 @@
   margin: 30px;
 }
 .details-wrapper {
-  width: 50%;
+  width: 70%;
   font-size: 20px;
-  font-weight: 500;
 }
 
 .wrapper {
@@ -19,4 +18,51 @@
 
 .weakness {
   display: inline-block;
+}
+
+.pokemon-attacks {
+  padding-left: 20px;
+}
+.details-wrapper div {
+  margin-bottom: 7px;
+}
+.details-label {
+  font-weight: bold;
+}
+
+.pokemon-image {
+  width: 400px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .pokemon-details {
+    display: inline;
+  }
+  .wrapper {
+    display: inline-block;
+    width: 45%;
+    margin: 10px;
+  }
+  .details-img-wrapper {
+    width: 100%;
+    margin: 0 0 30px 0;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .pokemon-image {
+    width: auto;
+  }
+  .details-img-wrapper {
+    text-align: center;
+  }
+  .details-img-wrapper {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  .wrapper {
+    display: inline;
+    margin: 10px;
+  }
 }

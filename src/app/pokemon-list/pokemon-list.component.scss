@@ -1,17 +1,30 @@
 .container {
-  width: 100%;
+  width: 65%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .wrapper {
-  width: 13%;
-  height: 12%;
   display: inline-block;
-  margin: 10px 24px;
+  width: 30%;
+  margin: 10px;
+  height: auto;
 }
 
 .spinner {
-  margin-top: 50%;
+  position: fixed;
+  top: 80%;
+}
+
+@media only screen and (max-width: 480px) {
+  .wrapper {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .container {
+    width: 100%;
+  }
 }

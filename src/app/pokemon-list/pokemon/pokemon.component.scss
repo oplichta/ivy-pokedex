@@ -1,7 +1,21 @@
 mat-card-header {
-  width: 200px;
-  margin: 10px;
+  // width: 200px;
+  // margin: 10px;
+  text-align: center;
 }
 .spinner {
   margin-top: 50%;
+}
+
+mat-card-content {
+  text-align: center;
+}
+.pokemon-image {
+  width: 70%;
+}
+
+@media only screen and (max-width: 1200px) {
+  .pokemon-image {
+    width: 100%;
+  }
 }

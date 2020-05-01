@@ -1,13 +1,12 @@
 <mat-card class='pokemon-details'>
   <div class='details-img-wrapper'>
-    <img mat-card-image
-      class="pokemon-image"
+    <img class="pokemon-image"
       src="{{pokemon.imageUrl}}"
       alt="Photo">
   </div>
   <div class='details-wrapper'>
-    <div>Id: {{pokemon.id}}</div>
-    <div>Name: {{pokemon.name}}</div>
+    <div><span class="details-label">Id:</span> {{pokemon.id}}</div>
+    <div><span class="details-label">Name:</span> {{pokemon.name}}</div>
     <div>Supertype: {{pokemon.supertype}}</div>
     <div>Series: {{pokemon.series}}</div>
     <div>Rarity: {{pokemon.rarity}}</div>
@@ -15,22 +14,23 @@
     <div>HP: {{pokemon.hp}}</div>
     <div>Set: {{pokemon.set}}</div>
     <div class='weakness'>Weaknesses:
-      <div *ngFor="let weakness of pokemon.weaknesses">
+      <span *ngFor="let weakness of pokemon.weaknesses">
         {{weakness.type}} {{weakness.value}}
-      </div>
+      </span>
     </div>
     <div>Attacks:
-      <div *ngFor="let attack of pokemon.attacks">
-        <div>{{attack.name}}</div>
-        <div>{{attack.damage}}</div>
-        <div *ngFor="let cst of attack.cost">{{cst}}</div>
-        <div>{{attack.convertedEnergyCost}}</div>
-        <div>{{attack.text}}</div>
+      <div class="pokemon-attacks"
+        *ngFor="let attack of pokemon.attacks">
+        <div><span class="details-label">Name: </span>{{attack.name}} </div>
+        <div><span class="details-label">Damage: </span>{{attack.damage}}
+          <span *ngFor="let cst of attack.cost">{{cst}} </span></div>
+        <div><span class="details-label">Energy Cost: </span>{{attack.convertedEnergyCost}} </div>
+        <div><span class="details-label">Text: </span>{{attack.text}} </div>
       </div>
     </div>
     <div>Evolves from: {{pokemon.evolvesFrom}}</div>
     <div>Types:
-      <div *ngFor="let type of pokemon.types">{{type}}</div>
+      <span *ngFor="let type of pokemon.types">{{type}}</span>
     </div>
   </div>
 </mat-card>

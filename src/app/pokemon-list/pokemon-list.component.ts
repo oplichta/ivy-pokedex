@@ -68,7 +68,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.dialog.open(PokemonDetailsComponent, {
           height: '1200px',
-          width: '800px',
+          width: '1200px',
           data: res[0],
         });
 
