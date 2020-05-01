@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Pokemon, Attack } from '../shared/pokemon';
+import { Pokemon } from '../shared/pokemon';
 import { PokemonListService } from '../shared/pokemon-list.service';
 import { Observable } from 'rxjs';
-import { map, take, flatMap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -18,7 +17,6 @@ export class PokemonDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.pokemon);
     this.similarPkmns$ = this.pokemonListService.similarPokemons$;
   }
 }

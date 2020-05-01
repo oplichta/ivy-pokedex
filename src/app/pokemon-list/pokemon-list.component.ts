@@ -1,17 +1,11 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Pokemon } from './shared/pokemon';
 import { Observable, Subject } from 'rxjs';
 import { PokemonListService } from './shared/pokemon-list.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -25,27 +19,32 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   public pokemonsList = new Array<Pokemon>();
   public loadedPage = 1;
   public destroy = new Subject<any>();
-
-  @Output() openDialog = new EventEmitter<string>();
+  public notScrolly = true;
 
   constructor(
     private pokemonListService: PokemonListService,
     public dialog: MatDialog,
-    route: ActivatedRoute
-  ) {
-    route.params.pipe(takeUntil(this.destroy)).subscribe((params) => {
-      this.onOpenDialog(params.id);
-    });
-  }
+    public route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-  notScrolly = true;
   ngOnInit(): void {
     this.showSpinner = true;
     this.loadPokemons(undefined, this.loadedPage);
+    this.openDialogFromUrl();
   }
 
   ngOnDestroy() {
     this.destroy.next();
+  }
+
+  openDialogFromUrl() {
+    this.route.params.pipe(takeUntil(this.destroy)).subscribe((params) => {
+      if (params.id !== undefined) {
+        this.dialog.closeAll();
+        this.onOpenDialog(params.id);
+      }
+    });
   }
 
   loadPokemons(id?, page?, types?, supertype?, rarity?) {
@@ -58,7 +57,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       });
   }
 
-  public onOpenDialog(pokemonId: string) {
+  onOpenDialog(pokemonId: string) {
+    this.router.navigate(['/details', pokemonId]);
     this.pokemonListService
       .getPokemon(pokemonId)
       .pipe(
@@ -86,10 +86,11 @@ export class PokemonListComponent implements OnInit, OnDestroy {
               pokemonArray.cards
                 .filter(
                   (pokemon) =>
+                    pokemon.id !== this.selectedPokemon.id &&
                     pokemon.hp >= this.selectedPokemon.hp * 0.9 &&
                     pokemon.hp <= this.selectedPokemon.hp * 1.1
                 )
-                .slice(1, 4)
+                .slice(0, 3)
             )
           );
       });

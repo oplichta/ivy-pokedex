@@ -8,7 +8,7 @@
   (scrolled)="onScroll()">
   <app-pokemon class="wrapper"
     *ngFor="let pokemon of pokemonsList"
-    [pokemon]='pokemon'
-    (openDialog)="onOpenDialog($event)"></app-pokemon>
-  <mat-spinner *ngIf='showSpinner'></mat-spinner>
+    [pokemon]='pokemon'></app-pokemon>
+  <mat-spinner *ngIf='showSpinner'
+    class='spinner'></mat-spinner>
 </div>
