@@ -5,10 +5,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatDialogModule } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { from } from 'rxjs';
+
+class RouterStub {
+  navigate(params) {}
+}
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
@@ -20,7 +25,6 @@ describe('PokemonListComponent', () => {
         HttpClientTestingModule,
         OverlayModule,
         MatDialogModule,
-        RouterModule.forRoot([]),
         MatToolbarModule,
         MatProgressSpinnerModule,
         InfiniteScrollModule,
@@ -30,6 +34,13 @@ describe('PokemonListComponent', () => {
         MatDialog,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
+        { provide: Router, useClass: RouterStub },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{ id: 1 }]),
+          },
+        },
       ],
     }).compileComponents();
   }));
@@ -42,5 +53,12 @@ describe('PokemonListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should redirect the user to /details/:id page after pokemon selection', () => {
+    let router = TestBed.inject(Router);
+    let spy = spyOn(router, 'navigate');
+    component.onOpenDialog('x1');
+    expect(spy).toHaveBeenCalledWith(['/details', 'x1']);
   });
 });

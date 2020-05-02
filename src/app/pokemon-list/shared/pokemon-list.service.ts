@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Cards, Pokemon } from './pokemon';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonListService {
   public similarPokemons$: Observable<Pokemon[]>;
+  public detailsLoader$ = new BehaviorSubject(false);
   constructor(private http: HttpClient) {}
 
   apiURL = 'https://api.pokemontcg.io/v1/';

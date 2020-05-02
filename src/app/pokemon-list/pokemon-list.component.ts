@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Pokemon } from './shared/pokemon';
 import { Observable, Subject } from 'rxjs';
 import { PokemonListService } from './shared/pokemon-list.service';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil, finalize } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonDetailsComponent } from './pokemon-details/pokemon-details.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PokemonListComponent implements OnInit, OnDestroy {
   public pokemons$: Observable<Pokemon[]>;
-  public selectedPokemon: Pokemon;
   public showSpinner = false;
   public pokemonsList = new Array<Pokemon>();
   public loadedPage = 1;
@@ -50,8 +49,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   loadPokemons(id?, page?, types?, supertype?, rarity?) {
     this.pokemonListService
       .getPokemon(undefined, page)
+      .pipe(finalize(() => (this.showSpinner = false)))
       .subscribe((response) => {
-        this.showSpinner = true;
         this.notScrolly = true;
         this.pokemonsList = this.pokemonsList.concat(response.cards);
       });
@@ -65,37 +64,44 @@ export class PokemonListComponent implements OnInit, OnDestroy {
         take(1),
         map((response) => response.cards)
       )
-      .subscribe((res) => {
-        this.dialog.open(PokemonDetailsComponent, {
-          height: '1200px',
-          width: '1200px',
-          data: res[0],
-        });
+      .subscribe(
+        (res) => {
+          this.pokemonListService.detailsLoader$.next(true);
+          this.dialog.open(PokemonDetailsComponent, {
+            height: '1200px',
+            width: '1200px',
+            data: res[0],
+          });
 
-        this.selectedPokemon = res[0];
-        this.pokemonListService.similarPokemons$ = this.pokemonListService
-          .getPokemon(
-            undefined,
-            undefined,
-            this.selectedPokemon.types,
-            'Pokémon',
-            this.selectedPokemon.rarity
-          )
-          .pipe(
-            map((pokemonArray) =>
-              pokemonArray.cards
-                .filter(
-                  (pokemon) =>
-                    pokemon.id !== this.selectedPokemon.id &&
-                    pokemon.hp >= this.selectedPokemon.hp * 0.9 &&
-                    pokemon.hp <= this.selectedPokemon.hp * 1.1
-                )
-                .slice(0, 3)
-            )
-          );
-      });
+          this.loadSimilarPokemons(res[0]);
+        },
+        (error) => error
+      );
   }
 
+  loadSimilarPokemons(selectedPokemon: Pokemon) {
+    this.pokemonListService.similarPokemons$ = this.pokemonListService
+      .getPokemon(
+        undefined,
+        undefined,
+        selectedPokemon.types,
+        'Pokémon',
+        selectedPokemon.rarity
+      )
+      .pipe(
+        map((pokemonArray) =>
+          pokemonArray.cards
+            .filter(
+              (pokemon) =>
+                pokemon.id !== selectedPokemon.id &&
+                pokemon.hp >= selectedPokemon.hp * 0.9 &&
+                pokemon.hp <= selectedPokemon.hp * 1.1
+            )
+            .slice(0, 3)
+        ),
+        finalize(() => this.pokemonListService.detailsLoader$.next(false))
+      );
+  }
   onScroll() {
     if (this.notScrolly) {
       this.showSpinner = true;

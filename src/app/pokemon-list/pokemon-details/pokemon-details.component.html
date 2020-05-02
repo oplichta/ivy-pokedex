@@ -34,9 +34,13 @@
     </div>
   </div>
 </mat-card>
+<mat-spinner *ngIf='detailsSpinner'
+  class='details-spinner'></mat-spinner>
 <div>
   <h2> Similar pokemons:</h2>
   <app-pokemon class="wrapper"
-    *ngFor="let pokemon of similarPkmns$ | async"
+    *ngFor="let pokemon of similarPkmns$ | async "
     [pokemon]='pokemon'></app-pokemon>
+  <mat-spinner *ngIf='similarPokemonSpinner'
+    class='spinner'></mat-spinner>
 </div>
