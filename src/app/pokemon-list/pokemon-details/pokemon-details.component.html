@@ -7,18 +7,18 @@
   <div class='details-wrapper'>
     <div><span class="details-label">Id:</span> {{pokemon.id}}</div>
     <div><span class="details-label">Name:</span> {{pokemon.name}}</div>
-    <div>Supertype: {{pokemon.supertype}}</div>
-    <div>Series: {{pokemon.series}}</div>
-    <div>Rarity: {{pokemon.rarity}}</div>
-    <div>Pokedex number: {{pokemon.nationalPokedexNumber}}</div>
-    <div>HP: {{pokemon.hp}}</div>
-    <div>Set: {{pokemon.set}}</div>
-    <div class='weakness'>Weaknesses:
+    <div><span class="details-label">Supertype:</span> {{pokemon.supertype}}</div>
+    <div><span class="details-label">Series:</span> {{pokemon.series}}</div>
+    <div><span class="details-label">Rarity:</span> {{pokemon.rarity}}</div>
+    <div><span class="details-label">Pokedex number:</span> {{pokemon.nationalPokedexNumber}}</div>
+    <div><span class="details-label">HP:</span> {{pokemon.hp}}</div>
+    <div><span class="details-label">Set:</span> {{pokemon.set}}</div>
+    <div class='weakness'><span class="details-label">Weaknesses:</span>
       <span *ngFor="let weakness of pokemon.weaknesses">
         {{weakness.type}} {{weakness.value}}
       </span>
     </div>
-    <div>Attacks:
+    <div><span class="details-label">Attacks:</span>
       <div class="pokemon-attacks"
         *ngFor="let attack of pokemon.attacks">
         <div><span class="details-label">Name: </span>{{attack.name}} </div>
@@ -28,8 +28,8 @@
         <div><span class="details-label">Text: </span>{{attack.text}} </div>
       </div>
     </div>
-    <div>Evolves from: {{pokemon.evolvesFrom}}</div>
-    <div>Types:
+    <div><span class="details-label">Evolves from:</span> {{pokemon.evolvesFrom}}</div>
+    <div><span class="details-label">Types:</span>
       <span *ngFor="let type of pokemon.types">{{type}}</span>
     </div>
   </div>
@@ -37,10 +37,12 @@
 <mat-spinner *ngIf='detailsSpinner'
   class='details-spinner'></mat-spinner>
 <div>
-  <h2> Similar pokemons:</h2>
+  <h2>Similar pokemons:</h2>
   <app-pokemon class="wrapper"
     *ngFor="let pokemon of similarPkmns$ | async "
     [pokemon]='pokemon'></app-pokemon>
+  <h2 *ngIf="!(similarPkmns$ | async)?.length && !similarPokemonSpinner"
+    class="no-similar-pokemons">No pokemons are similar :( </h2>
   <mat-spinner *ngIf='similarPokemonSpinner'
     class='spinner'></mat-spinner>
 </div>

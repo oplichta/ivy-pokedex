@@ -75,7 +75,9 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
           this.loadSimilarPokemons(res[0]);
         },
-        (error) => error
+        (error) => {
+          return error;
+        }
       );
   }
 
@@ -102,6 +104,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
         finalize(() => this.pokemonListService.detailsLoader$.next(false))
       );
   }
+
   onScroll() {
     if (this.notScrolly) {
       this.showSpinner = true;

@@ -1,4 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject,
+} from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PokemonListComponent } from './pokemon-list.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +16,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { from } from 'rxjs';
 import { DebugElement } from '@angular/core';
+import { ErrorHandlerService } from './shared/error-handler.service';
+import { PokemonComponent } from './pokemon/pokemon.component';
+import { MatCardModule } from '@angular/material/card';
 
 class RouterStub {
   navigate(params) {}
@@ -30,8 +38,9 @@ describe('PokemonListComponent', () => {
         MatToolbarModule,
         MatProgressSpinnerModule,
         InfiniteScrollModule,
+        MatCardModule,
       ],
-      declarations: [PokemonListComponent],
+      declarations: [PokemonListComponent, PokemonComponent],
       providers: [
         MatDialog,
         { provide: MAT_DIALOG_DATA, useValue: {} },
@@ -43,6 +52,7 @@ describe('PokemonListComponent', () => {
             params: from([{ id: 1 }]),
           },
         },
+        ErrorHandlerService,
       ],
     }).compileComponents();
   }));
@@ -107,4 +117,14 @@ describe('PokemonListComponent', () => {
     const p = pokemonlistElement.querySelector('app-pokemon');
     expect(p).not.toBeNull();
   });
+
+  it('correctly handles error', inject(
+    [ErrorHandlerService],
+    (service: ErrorHandlerService) => {
+      const spy = spyOn(console, 'log');
+      const error: Error = new Error('ERROR');
+      service.processError(error);
+      expect(spy).toHaveBeenCalledWith(error);
+    }
+  ));
 });
