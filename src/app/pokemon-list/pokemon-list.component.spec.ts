@@ -10,6 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { from } from 'rxjs';
+import { DebugElement } from '@angular/core';
 
 class RouterStub {
   navigate(params) {}
@@ -18,6 +19,7 @@ class RouterStub {
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
   let fixture: ComponentFixture<PokemonListComponent>;
+  let element: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -48,6 +50,7 @@ describe('PokemonListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PokemonListComponent);
     component = fixture.componentInstance;
+    element = fixture.nativeElement;
     fixture.detectChanges();
   });
 
@@ -56,9 +59,52 @@ describe('PokemonListComponent', () => {
   });
 
   it('should redirect the user to /details/:id page after pokemon selection', () => {
-    let router = TestBed.inject(Router);
-    let spy = spyOn(router, 'navigate');
+    const router = TestBed.inject(Router);
+    const spy = spyOn(router, 'navigate');
     component.onOpenDialog('x1');
     expect(spy).toHaveBeenCalledWith(['/details', 'x1']);
+  });
+
+  it('should not render pokemon component when no pokemon data', () => {
+    component.pokemonsList = [];
+    fixture.detectChanges();
+    const pokemonslistDE: DebugElement = fixture.debugElement;
+    const pokemonslistElement: HTMLElement = pokemonslistDE.nativeElement;
+    const p = pokemonslistElement.querySelector('app-pokemon');
+    expect(p).toBeNull();
+  });
+
+  it('should render spinner component when no pokemon data', () => {
+    component.pokemonsList = [];
+    fixture.detectChanges();
+    const pokemonslistDE: DebugElement = fixture.debugElement;
+    const pokemonslistElement: HTMLElement = pokemonslistDE.nativeElement;
+    const p = pokemonslistElement.querySelector('mat-spinner');
+    expect(p).not.toBeNull();
+  });
+
+  it('should render pokemon component when there is pokemon data', () => {
+    component.pokemonsList = [
+      {
+        id: 'id',
+        name: 'name',
+        supertype: 'supertype',
+        imageUrl: 'imageUrl',
+        series: 'series',
+        types: [],
+        rarity: 'rarity',
+        nationalPokedexNumber: 0,
+        hp: 0,
+        set: 'set',
+        weaknesses: [],
+        attacks: [],
+        evolvesFrom: 'evolvesFrom',
+      },
+    ];
+    fixture.detectChanges();
+    const pokemonlistDE: DebugElement = fixture.debugElement;
+    const pokemonlistElement: HTMLElement = pokemonlistDE.nativeElement;
+    const p = pokemonlistElement.querySelector('app-pokemon');
+    expect(p).not.toBeNull();
   });
 });

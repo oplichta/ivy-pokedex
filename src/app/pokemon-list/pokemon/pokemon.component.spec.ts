@@ -15,6 +15,7 @@ import { Pokemon } from '../shared/pokemon';
 describe('PokemonComponent', () => {
   let component: PokemonComponent;
   let fixture: ComponentFixture<PokemonComponent>;
+  let element: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -38,10 +39,25 @@ describe('PokemonComponent', () => {
     fixture = TestBed.createComponent(PokemonComponent);
     component = fixture.componentInstance;
     component.pokemon = new Pokemon();
+    element = fixture.nativeElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should create name of pokemon', async () => {
+    component.pokemon.name = 'Pikachu';
+    fixture.detectChanges();
+    const el = element.querySelector('.pokemon-title');
+    expect(el.textContent).toContain('Pikachu');
+  });
+
+  it('should create img Url of pokemon', async () => {
+    component.pokemon.imageUrl = 'PikachuImage';
+    fixture.detectChanges();
+    const el = element.querySelector('.pokemon-image');
+    expect(el.getAttribute('src')).toEqual('PikachuImage');
   });
 });

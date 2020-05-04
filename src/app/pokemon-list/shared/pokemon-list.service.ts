@@ -7,7 +7,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class PokemonListService {
-  public similarPokemons$: Observable<Pokemon[]>;
+  public similarPokemons$ = new Observable<Pokemon[]>();
   public detailsLoader$ = new BehaviorSubject(false);
   constructor(private http: HttpClient) {}
 
