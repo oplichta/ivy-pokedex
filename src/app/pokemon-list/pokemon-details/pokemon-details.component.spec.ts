@@ -60,7 +60,7 @@ describe('PokemonDetailsComponent', () => {
     expect(el.getAttribute('src')).toEqual('PikachuImage');
   });
 
-  it('should render spinner component when no  pokemon details data', () => {
+  it('should render spinner component when loading pokemon details data', () => {
     const service = TestBed.inject(PokemonListService);
     const selected$ = service.detailsLoader$;
     selected$.next(true);
@@ -75,6 +75,14 @@ describe('PokemonDetailsComponent', () => {
 
   it('should render spinner component when no similar pokemon data', () => {
     const el = element.querySelector('.spinner');
+    expect(el).not.toBeNull();
+  });
+
+  it('should show warning when no pokemon data and no spinner', () => {
+    component.pokemon = null;
+    component.detailsSpinner = false;
+    fixture.detectChanges();
+    const el = element.querySelector('.no-pokemon');
     expect(el).not.toBeNull();
   });
 });
