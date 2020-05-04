@@ -66,14 +66,15 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.pokemonListService.detailsLoader$.next(true);
+          if (res.length) {
+            this.pokemonListService.detailsLoader$.next(true);
+            this.loadSimilarPokemons(res[0]);
+          }
           this.dialog.open(PokemonDetailsComponent, {
             height: '1200px',
             width: '1200px',
             data: res[0],
           });
-
-          this.loadSimilarPokemons(res[0]);
         },
         (error) => {
           return error;

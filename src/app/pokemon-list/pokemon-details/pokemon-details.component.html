@@ -1,4 +1,5 @@
-<mat-card class='pokemon-details'>
+<mat-card class='pokemon-details'
+  *ngIf='pokemon'>
   <div class='details-img-wrapper'>
     <img class="pokemon-image"
       src="{{pokemon.imageUrl}}"
@@ -34,9 +35,11 @@
     </div>
   </div>
 </mat-card>
+<h2 *ngIf="!pokemon && !detailsSpinner"
+  class="no-pokemon">No pokemon with that Id :( </h2>
 <mat-spinner *ngIf='detailsSpinner'
   class='details-spinner'></mat-spinner>
-<div>
+<div *ngIf='pokemon'>
   <h2>Similar pokemons:</h2>
   <app-pokemon class="wrapper"
     *ngFor="let pokemon of similarPkmns$ | async "
